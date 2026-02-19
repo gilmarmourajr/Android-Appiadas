@@ -17,6 +17,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.heiderlopes.appiadas.ui.theme.AppiadasTheme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +51,22 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppiadasScreen(modifier: Modifier = Modifier) {
+
+    var piadaSelecionada by remember { mutableStateOf("Aqui sera exibida a piada") }
+    val piadas: List<Piada> = listOf(
+        Piada(1, "Qual o rei dos queijos?\nO REIqueijão"),
+        Piada(2, "O que um álcool disse para outro álcool?\nEtanois!"),
+        Piada(3, "O que é um piolho na cabeça de um careca?\nUm sem terra!"),
+        Piada(4, "Piada 4"),
+        Piada(5, "Por que o Batman colocou o bat-móvel no seguro?\nPorque ele tem medo que Robin!"),
+        Piada(6, "Por que o Batman não joga baralho?\nPorque ele sempre tem medo do Coringa."),
+        Piada(7, "Batman, por que você está batendo nesse palhaço?\nPorque ele é o Coringa!\nMas Batman, esse não é o Coringa, é o Patatá!"),
+    )
+
+    fun trocarPiada() {
+        val index = Random.nextInt(piadas.size)
+        piadaSelecionada = piadas[index].texto
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -65,7 +86,8 @@ fun AppiadasScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Aqui sera exibida a piada",
+            Text(
+                piadaSelecionada,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp,
@@ -78,13 +100,18 @@ fun AppiadasScreen(modifier: Modifier = Modifier) {
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { }
+                onClick = { trocarPiada() }
             ) {
                 Text("Nova piada")
             }
         }
     }
 }
+
+data class Piada (
+    var id : Long,
+    var texto : String
+)
 
 @Preview(showBackground = true)
 @Composable
